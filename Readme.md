@@ -33,3 +33,34 @@ Aggregation (metrics)
 Data Contract (summary.json)
    ↓
 Streamlit Analytics Dashboard
+```
+
+## Project Structure
+```bash
+Data_Eng_Task/
+├── dags/
+│   └── website_crawler_dag.py
+├── src/
+│   ├──__init__.py
+│   ├── crawler.py
+│   ├── extractor.py
+│   ├── transformer.py
+│   ├── aggregator.py
+│   └── utils.py
+├── config/
+│   └── websites.yaml
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── metrics/
+│       └── summary.json
+├── streamlit_app/
+│   ├── app.py
+│   ├── Dockerfile
+│   └── requirements.txt
+├── logs/
+├── docker-compose.yaml
+├── requirements.txt
+├── .gitignore 
+└── README.md
+```
