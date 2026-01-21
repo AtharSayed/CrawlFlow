@@ -1,0 +1,71 @@
+# ---------------------------
+# Python
+# ---------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# ---------------------------
+# Airflow
+# ---------------------------
+airflow.cfg
+airflow.db
+airflow-webserver.pid
+
+# Airflow logs (you already have /logs)
+logs/
+airflow_logs/
+
+# ---------------------------
+# Project data (generated)
+# ---------------------------
+data/raw/
+data/processed/
+data/metrics/
+
+# Keep directory structure
+!data/.gitkeep
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/metrics/.gitkeep
+
+# ---------------------------
+# Configuration secrets
+# ---------------------------
+.env
+.env.*
+secrets.yaml
+config/*.local.yaml
+
+# ---------------------------
+# Logging
+# ---------------------------
+*.log
+
+# ---------------------------
+# OS files
+# ---------------------------
+.DS_Store
+Thumbs.db
+
+# ---------------------------
+# IDEs / Editors
+# ---------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+
+

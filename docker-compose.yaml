@@ -1,0 +1,60 @@
+services:
+  airflow:
+    image: apache/airflow:2.9.3-python3.11
+    container_name: data_eng_task_airflow
+    restart: always
+
+    # ----------------------------
+    # Environment variables
+    # ----------------------------
+    environment:
+      # Executor + DB (VALID combination)
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
+
+      # Core settings
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "true"
+
+      # 🔑 CRITICAL: allow `from src...` imports
+      PYTHONPATH: /opt/airflow
+
+      # Python dependencies for your DAG
+      _PIP_ADDITIONAL_REQUIREMENTS: >
+        PyYAML
+        requests
+        beautifulsoup4
+        ratelimit
+
+    # ----------------------------
+    # Volumes
+    # ----------------------------
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./config:/opt/airflow/config
+      - ./data:/opt/airflow/data
+      - ./logs:/opt/airflow/logs
+
+    # ----------------------------
+    # Ports
+    # ----------------------------
+    ports:
+      - "8080:8080"
+
+    # ----------------------------
+    # Startup command
+    # ----------------------------
+    command: >
+      bash -c "
+      airflow db migrate &&
+      airflow users create
+        --username admin
+        --password admin
+        --firstname Admin
+        --lastname User
+        --role Admin
+        --email admin@example.com || true &&
+      airflow scheduler &
+      airflow webserver
+      "

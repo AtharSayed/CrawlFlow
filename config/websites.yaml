@@ -1,0 +1,9 @@
+websites:
+  - https://www.apple.com
+  - https://www.microsoft.com
+  - https://www.amazon.com
+  - https://www.tesla.com
+  - https://www.netflix.com
+  # Scalable to n websites 
+rate_limit:  # Optional global settings
+  requests_per_minute: 60
