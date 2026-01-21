@@ -4,31 +4,24 @@ services:
     container_name: data_eng_task_airflow
     restart: always
 
-    # ----------------------------
-    # Environment variables
-    # ----------------------------
     environment:
-      # Executor + DB (VALID combination)
+      # Executor + DB (VALID for local)
       AIRFLOW__CORE__EXECUTOR: SequentialExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
 
-      # Core settings
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "true"
 
-      # 🔑 CRITICAL: allow `from src...` imports
+      # Allow imports like: from src.utils import ...
       PYTHONPATH: /opt/airflow
 
-      # Python dependencies for your DAG
+      # Python deps required by DAGs
       _PIP_ADDITIONAL_REQUIREMENTS: >
         PyYAML
         requests
         beautifulsoup4
         ratelimit
 
-    # ----------------------------
-    # Volumes
-    # ----------------------------
     volumes:
       - ./dags:/opt/airflow/dags
       - ./src:/opt/airflow/src
@@ -36,15 +29,9 @@ services:
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
 
-    # ----------------------------
-    # Ports
-    # ----------------------------
     ports:
       - "8080:8080"
 
-    # ----------------------------
-    # Startup command
-    # ----------------------------
     command: >
       bash -c "
       airflow db migrate &&
@@ -58,3 +45,19 @@ services:
       airflow scheduler &
       airflow webserver
       "
+
+
+  streamlit:
+    build: ./streamlit_analytics
+    container_name: website_analytics_streamlit
+    restart: always
+
+    volumes:
+      - ./data:/data   # shared metrics (summary.json)
+
+    ports:
+      - "8501:8501"
+
+    depends_on:
+      - airflow
+
