@@ -1,47 +1,55 @@
 # 🌐 Scalable Website Crawling & Analytics Pipeline
 
-An **end-to-end, scalable data engineering pipeline** that crawls multiple websites, extracts structured content, aggregates analytics, and visualizes insights through a professional Streamlit dashboard — all orchestrated using **Apache Airflow** and **Docker**.
+A **production-ready, end-to-end data engineering pipeline** that crawls multiple websites, extracts structured content, aggregates analytics, and visualizes insights through a professional **Streamlit dashboard**, orchestrated using **Apache Airflow** and fully **Dockerized**.
+
+This project is designed to demonstrate **real-world data engineering practices**, clean system architecture, and scalability-first thinking.
 
 ---
 
-##  Project Overview
+## Project Highlights
 
-This project demonstrates how to design and implement a **production-style data pipeline** with clear separation of concerns:
-
-- **Config-driven ingestion** (scale from 1 → N websites)
-- **Modular crawling & extraction logic**
-- **Airflow-based orchestration**
-- **Aggregation layer for analytics**
-- **Decoupled visualization layer**
-- **Fully Dockerized setup**
-
-The system is designed to be **scalable, and extensible**.
+- Config-driven website crawling (scale from 1 → N websites)
+- Dynamic task mapping using Apache Airflow
+- Modular, maintainable Python codebase
+- Aggregation layer producing analytics-ready metrics
+- Decoupled Streamlit analytics dashboard
+- Fully Dockerized and reproducible setup
+- Developer-friendly workflow with Makefile
 
 ---
 
-## 🧠 Architecture
+##  System Architecture
 
 ```text
-Config (YAML)
-   ↓
-Airflow DAG
-   ↓
+websites.yaml (Config)
+        ↓
+Apache Airflow DAG
+        ↓
 Crawling → Extraction → Transformation
-   ↓
-Aggregation (metrics)
-   ↓
-Data Contract (summary.json)
-   ↓
+        ↓
+Aggregation Layer
+        ↓
+summary.json (Data Contract)
+        ↓
 Streamlit Analytics Dashboard
 ```
 
-## Project Structure
-```bash
+### Key Design Principles
+- Loose coupling between ETL and analytics
+- Stable file-based data contract
+- Config-based scalability (no code changes required)
+- Independent service deployment
+
+---
+
+##  Project Structure
+
+```text
 Data_Eng_Task/
 ├── dags/
 │   └── website_crawler_dag.py
 ├── src/
-│   ├──__init__.py
+│   ├── __init__.py
 │   ├── crawler.py
 │   ├── extractor.py
 │   ├── transformer.py
@@ -54,113 +62,184 @@ Data_Eng_Task/
 │   ├── processed/
 │   └── metrics/
 │       └── summary.json
-├── streamlit_app/
+├── streamlit_analytics/
 │   ├── app.py
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── logs/
 ├── docker-compose.yaml
+├── Makefile
 ├── requirements.txt
-├── .gitignore 
 └── README.md
 ```
 
-## Technology Stack
-| Layer            | Technology                      |
-| ---------------- | ------------------------------- |
-| Orchestration    | Apache Airflow                  |
-| Crawling         | Python, Requests, BeautifulSoup |
-| Processing       | Pandas                          |
-| Analytics        | Streamlit, Plotly               |
-| Configuration    | YAML                            |
-| Containerization | Docker, Docker Compose          |
+---
 
+##  Technology Stack
+
+| Layer | Technology |
+|-----|-----------|
+| Orchestration | Apache Airflow |
+| Crawling | Python, Requests |
+| Parsing | BeautifulSoup |
+| Processing | Pandas |
+| Analytics | Streamlit, Plotly |
+| Configuration | YAML |
+| Containerization | Docker, Docker Compose |
+
+---
+
+##  Airflow Pipeline Workflow
+
+1. Load website configuration from `websites.yaml`
+2. Dynamically crawl each website
+3. Extract structured content (homepage, navbar, footer, case studies)
+4. Transform and clean extracted data
+5. Aggregate analytics and metrics
+6. Persist output to `summary.json`
+
+---
+
+##  Analytics Dashboard (Streamlit)
+
+The Streamlit application:
+
+- Consumes `summary.json`
+- Displays KPI cards and charts
+- Provides section-wise content statistics
+- Shows pipeline metadata for traceability
+
+The analytics layer is **read-only and decoupled**, making it easy to replace or scale independently.
+
+---
+
+##  Dockerized Architecture
+
+The system runs as two independent services:
+
+### Airflow Service
+- Scheduler and webserver
+- Executes the crawling and aggregation pipeline
+
+### Streamlit Service
+- Serves analytics dashboard
+- Reads shared output from `data/metrics/summary.json`
+
+Both services communicate via a shared Docker volume.
+
+---
 
 ##  How to Run the Project
 
-This project is fully containerized using **Docker Compose**. Follow the steps below to run the complete end-to-end pipeline locally.
-
----
-
-###  Prerequisites
-
-Make sure the following are installed on your system:
-
-- Docker (v20+ recommended)
+### Prerequisites
+- Docker (v20+)
 - Docker Compose (v2+)
-- At least **4 GB RAM** allocated to Docker
+- Minimum 4 GB RAM allocated to Docker
 
 ---
 
-###  Clone the Repository
+### Clone the Repository
 
 ```bash
 git clone https://github.com/AtharSayed/CrawlFlow.git
 cd CrawlFlow
-
 ```
 
-###  Build and Start All Services
+---
+
+### Build and Start Services
 
 ```bash
 docker compose up -d --build
-
 ```
 
-### Accessing the Applications 
+---
 
-| Service             | URL                                            |
-| ------------------- | ---------------------------------------------- |
-| Airflow UI          | [http://localhost:8080](http://localhost:8080) |
-| Streamlit Dashboard | [http://localhost:8501](http://localhost:8501) |
+### Access the Applications
 
+| Service | URL |
+|------|----|
+| Airflow UI | http://localhost:8080 |
+| Streamlit Dashboard | http://localhost:8501 |
 
-### Airflow Login Credentials 
-
-```bash
-docker exec -it data_eng_task_airflow airflow users create `
-  --role Admin `
-  --username admin `
-  --email admin@example.com `
-  --firstname admin `
-  --lastname user `
-  --password admin
-
+**Airflow Credentials**
 ```
-After running this command the airflow will create a admin user with its credentials 
-
-```bash
 Username: admin
 Password: admin
 ```
 
-### Triggering the Pipeline 
+---
 
-1) Open Airflow UI
+### Trigger the Pipeline
 
-2) Navigate to DAGs
+1. Open the Airflow UI
+2. Enable `website_crawler_dag`
+3. Trigger the DAG manually
+4. Wait for all tasks to complete successfully
+5. Refresh the Streamlit dashboard to view analytics
 
-3) Enable website_crawler_dag
+---
 
-4) Click Trigger DAG 
+### Stop the Services
 
-5) Wait for all tasks to complete successfully
+```bash
+docker compose down
+```
 
-6) The pipeline will:
+---
 
-7) Crawl configured websites
+##  Makefile Commands
 
-8) Extract and process content
+This project includes a Makefile for simplified operations.
 
-9) Generate analytics in summary.json
+| Command | Description |
+|------|------------|
+| `make build` | Build Docker images |
+| `make up` | Start all services |
+| `make down` | Stop all services |
+| `make restart` | Restart services |
+| `make dags-refresh` | Refresh Airflow DAGs |
+| `make airflow-logs` | View Airflow logs |
+| `make streamlit-logs` | View Streamlit logs |
+| `make clean` | Remove containers and volumes |
 
+---
 
-### View Analytics 
+##  Configuration
 
-Once the DAG completes successfully:
+Edit `config/websites.yaml` to add or remove websites:
 
-Open http://localhost:8501
+```yaml
+websites:
+  - https://www.apple.com
+  - https://www.microsoft.com
+  - https://www.amazon.com
 
-The Streamlit dashboard will automatically load analytics
+rate_limit:
+  requests_per_minute: 60
+```
 
-Refresh the page after each pipeline run to see updated insights
+No code changes are required when scaling.
+
+---
+
+## Scalability & Extensibility
+
+- Replace `summary.json` with PostgreSQL, DuckDB, or S3 + Parquet
+- Replace Streamlit with Superset, Metabase, or Power BI
+- Add alerting, historical metrics, or anomaly detection
+
+The core pipeline remains unchanged.
+
+---
+
+##  Author
+
+**Athar Sayed**  
+MTech (Artificial Intelligence) | Data & AI Engineering  
+Focused on building scalable, production-grade data and AI systems
+---
+
+## 📜 License
+
+This project is intended for educational and portfolio use.
