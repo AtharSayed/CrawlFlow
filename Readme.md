@@ -15,7 +15,7 @@ This project demonstrates how to design and implement a **production-style data 
 - **Decoupled visualization layer**
 - **Fully Dockerized setup**
 
-The system is designed to be **scalable, extensible, and interview-ready**.
+The system is designed to be **scalable, and extensible**.
 
 ---
 
