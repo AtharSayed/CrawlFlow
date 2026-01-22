@@ -64,3 +64,25 @@ Data_Eng_Task/
 ├── .gitignore 
 └── README.md
 ```
+
+## Technology Stack
+| Layer            | Technology                      |
+| ---------------- | ------------------------------- |
+| Orchestration    | Apache Airflow                  |
+| Crawling         | Python, Requests, BeautifulSoup |
+| Processing       | Pandas                          |
+| Analytics        | Streamlit, Plotly               |
+| Configuration    | YAML                            |
+| Containerization | Docker, Docker Compose          |
+
+
+## How to Run the Project 
+
+# 1) Prerequisites Required 
+i) Docker
+ii) Docker Compose
+
+#2) Start Services 
+```
+docker compose up -d
+```
