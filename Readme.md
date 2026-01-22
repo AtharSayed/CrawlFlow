@@ -76,13 +76,91 @@ Data_Eng_Task/
 | Containerization | Docker, Docker Compose          |
 
 
-## How to Run the Project 
+## ▶️ How to Run the Project
 
-# 1) Prerequisites Required 
-i) Docker
-ii) Docker Compose
+This project is fully containerized using **Docker Compose**. Follow the steps below to run the complete end-to-end pipeline locally.
 
-#2) Start Services 
+---
+
+###  Prerequisites
+
+Make sure the following are installed on your system:
+
+- Docker (v20+ recommended)
+- Docker Compose (v2+)
+- At least **4 GB RAM** allocated to Docker
+
+---
+
+###  Clone the Repository
+
+```bash
+git clone https://github.com/AtharSayed/CrawlFlow.git
+cd CrawlFlow
+
 ```
-docker compose up -d
+
+###  Build and Start All Services
+
+```bash
+docker compose up -d --build
+
 ```
+
+### Accessing the Applications 
+
+| Service             | URL                                            |
+| ------------------- | ---------------------------------------------- |
+| Airflow UI          | [http://localhost:8080](http://localhost:8080) |
+| Streamlit Dashboard | [http://localhost:8501](http://localhost:8501) |
+
+
+### Airflow Login Credentials 
+
+```bash
+docker exec -it data_eng_task_airflow airflow users create `
+  --role Admin `
+  --username admin `
+  --email admin@example.com `
+  --firstname admin `
+  --lastname user `
+  --password admin
+
+```
+After running this command the airflow will create a admin user with its credentials 
+
+```bash
+Username: admin
+Password: admin
+```
+
+### Triggering the Pipeline 
+
+1) Open Airflow UI
+
+2) Navigate to DAGs
+
+3) Enable website_crawler_dag
+
+4) Click Trigger DAG ▶️
+
+5) Wait for all tasks to complete successfully
+
+6) The pipeline will:
+
+7) Crawl configured websites
+
+8) Extract and process content
+
+9) Generate analytics in summary.json
+
+
+### View Analytics 
+
+Once the DAG completes successfully:
+
+Open http://localhost:8501
+
+The Streamlit dashboard will automatically load analytics
+
+Refresh the page after each pipeline run to see updated insights
