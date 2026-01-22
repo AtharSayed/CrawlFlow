@@ -76,7 +76,7 @@ Data_Eng_Task/
 | Containerization | Docker, Docker Compose          |
 
 
-## ▶️ How to Run the Project
+##  How to Run the Project
 
 This project is fully containerized using **Docker Compose**. Follow the steps below to run the complete end-to-end pipeline locally.
 
@@ -142,7 +142,7 @@ Password: admin
 
 3) Enable website_crawler_dag
 
-4) Click Trigger DAG ▶️
+4) Click Trigger DAG 
 
 5) Wait for all tasks to complete successfully
 
