@@ -17,6 +17,42 @@ This project is designed to demonstrate **real-world data engineering practices*
 - Developer-friendly workflow with Makefile
 
 ---
+## Streamlit Analytics Dashboard
+
+The project includes a modern, interactive analytics dashboard built with **Streamlit** that visualizes the crawled data and pipeline metrics in real time.
+
+### Features
+- KPI cards showing total/active/inactive websites and case studies found
+- Section-wise content length statistics (min, max, average, count)
+- Beautiful Plotly bar and range charts for homepage, navbar, footer, etc.
+- Pipeline metadata display (timestamp, orchestrator, data contract)
+- Fully responsive dark theme interface
+
+The dashboard is **decoupled** from the pipeline — it only reads from `data/metrics/summary.json`, so you can scale or replace the backend without touching the UI.
+
+![Streamlit Analytics Dashboard - Overview](assests/streamlit_dashboard.png)
+
+## Airflow Pipeline Workflow
+
+The end-to-end pipeline is orchestrated using **Apache Airflow** with **dynamic task mapping**, allowing it to scale to any number of websites defined in `config/websites.yaml` without code changes.
+
+### Workflow Steps
+1. `get_websites_list` — Loads websites from YAML config
+2. `crawl_website[]` — Dynamic task: Crawls each website (parallel)
+3. `extract_content[]` — Dynamic task: Parses homepage, navbar, footer, case studies
+4. `transform_data[]` — Cleans and structures the extracted content
+5. `aggregate_metrics` — Computes statistics and writes to `summary.json`
+
+
+### DAG Graph View (from Airflow UI)
+
+![Airflow DAG Graph - website_crawler_dag](assests/airflow_pipeline_graph.png)
+
+*Screenshot showing dynamic task mapping with PythonOperators for crawling, extraction, transformation, and aggregation.*
+
+This graph shows the task dependencies and dynamic mapped tasks clearly.
+
+**Schedule**: Daily (`@daily`) — but you can trigger manually anytime.
 
 ##  System Architecture
 
