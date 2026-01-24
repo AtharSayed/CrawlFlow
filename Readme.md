@@ -82,8 +82,6 @@ Streamlit Analytics Dashboard
 
 ```text
 ## Project Structure
-
-```text
 Data_Eng_Task/
 ├── dags/                           # Apache Airflow DAG definitions
 │   └── website_crawler_dag.py      # Main DAG file: defines the end-to-end crawling pipeline with dynamic task mapping
