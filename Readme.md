@@ -81,32 +81,41 @@ Streamlit Analytics Dashboard
 ##  Project Structure
 
 ```text
+## Project Structure
+
+```text
 Data_Eng_Task/
-├── dags/
-│   └── website_crawler_dag.py
-├── src/
-│   ├── __init__.py
-│   ├── crawler.py
-│   ├── extractor.py
-│   ├── transformer.py
-│   ├── aggregator.py
-│   └── utils.py
-├── config/
-│   └── websites.yaml
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── metrics/
-│       └── summary.json
-├── streamlit_analytics/
-│   ├── app.py
-│   ├── Dockerfile
-│   └── requirements.txt
-├── logs/
-├── docker-compose.yaml
-├── Makefile
-├── requirements.txt
-└── README.md
+├── dags/                           # Apache Airflow DAG definitions
+│   └── website_crawler_dag.py      # Main DAG file: defines the end-to-end crawling pipeline with dynamic task mapping
+│
+├── src/                            # Core Python business logic (modular ETL components)
+│   ├── __init__.py                 # Makes src a Python package
+│   ├── crawler.py                  # Handles HTTP requests, rate limiting, and raw HTML fetching
+│   ├── extractor.py                # Parses HTML using BeautifulSoup → extracts homepage, navbar, footer, case studies
+│   ├── transformer.py              # Cleans, normalizes, and structures extracted content (length calc, text processing)
+│   ├── aggregator.py               # Computes statistics (min/max/avg length per section) and writes summary.json
+│   └── utils.py                    # Shared helpers (logging, file I/O, date utils, retry logic, etc.)
+│
+├── config/                         # Configuration files (no code changes needed to add websites)
+│   └── websites.yaml               # List of target websites + global settings (rate limits, selectors, etc.)
+│
+├── data/                           # All persisted data (Airflow + Streamlit share this via volume)
+│   ├── raw/                        # Optional: can store full HTML dumps per website (not used by default)
+│   ├── processed/                  # Optional: can store cleaned per-website JSON/CSV (not used by default)
+│   └── metrics/                    
+│       └── summary.json            # Data contract / final output → consumed by Streamlit dashboard
+│
+├── streamlit_analytics/            # Independent analytics UI (decoupled from pipeline)
+│   ├── app.py                      # Main Streamlit application (KPIs, charts, metadata display)
+│   ├── Dockerfile                  # Builds the Streamlit container
+│   └── requirements.txt            # Python dependencies for Streamlit + Plotly + Pandas
+│
+├── logs/                           # Airflow scheduler/webserver/task logs + pipeline execution logs from website_crawler_dag.py (volume-mounted for persistence & debugging)
+│
+├── docker-compose.yaml             # Defines services: airflow (webserver + scheduler + worker) + streamlit
+├── Makefile                        # Developer-friendly shortcuts (build, up, down, logs, clean, etc.)
+├── requirements.txt                # Base dependencies for Airflow DAG tasks (used in Dockerfile)
+└── README.md                       # Project documentation (this file)
 ```
 
 ---
