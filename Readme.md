@@ -1,4 +1,4 @@
-# 🌐 Scalable Website Crawling & Analytics Pipeline
+# Scalable Website Crawling & Analytics Pipeline
 
 A **production-ready, end-to-end data engineering pipeline** that crawls multiple websites, extracts structured content, aggregates analytics, and visualizes insights through a professional **Streamlit dashboard**, orchestrated using **Apache Airflow** and fully **Dockerized**.
 
